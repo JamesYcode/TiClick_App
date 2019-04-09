@@ -4,7 +4,9 @@ function Users(props) {
   return(
     <div>
       {props.users.map(list => (
-        <h1>{list.name}</h1>
+        <div key={list.id}>
+          <h1>{list.name}</h1>
+        </div>
       ))}
     </div>
   )

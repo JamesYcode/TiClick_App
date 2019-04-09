@@ -6,9 +6,13 @@ const fetchAllUsers = async () => {
 };
 
 const createUser = async (user) => {
-  console.log(user);
   const mkUser = await api.post('/users/', {"user": user});
   return mkUser.data;
 }
 
-export { fetchAllUsers, createUser }
+const loginUser = async (loginData) => {
+ const resp = await api.post(`/user_token`, { auth: loginData });
+ return resp.data;
+}
+
+export { fetchAllUsers, createUser, loginUser }

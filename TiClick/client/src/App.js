@@ -3,20 +3,21 @@ import './App.css';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import { fetchAllUsers, createUser } from './services/users';
+import { fetchAllUsers, createUser, loginUser } from './services/users';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
-        name: '',
-        password: '',
-        email: '',
-        username: ''
+      name: '',
+      password: '',
+      email: '',
+      username: '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
   }
 
   async componentDidMount() {
@@ -32,16 +33,37 @@ class App extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    const newUser = {
+    const newUser = await createUser({
       name: this.state.name,
       password: this.state.password,
       email: this.state.email,
       username: this.state.username
-    }
-    createUser(newUser);
-    await this.getAllUsers();
+    });
+    this.setState(prevState => ({
+      users: [...prevState.users, newUser],
+      name: '',
+      password: '',
+      email: '',
+      username: ''
+    }));
   }
 
+  async handleLoginSubmit(e) {
+    console.log('pants')
+    e.preventDefault();
+    const login = await loginUser({
+      email: this.state.email,
+      password: this.state.password
+    });
+
+    console.log(login)
+    localStorage.setItem('jwt', login.jwt);
+    this.setState(prevState => ({
+      users: [...prevState.users, login],
+      email: '',
+      password: ''
+    }));
+  }
 
   handleChange(e) {
     const { name, value } = e.target;
@@ -50,13 +72,16 @@ class App extends Component {
     })
   };
 
+
   render() {
     return (
       <div className="App">
         <Header />
         <Main
+          handleLoginSubmit={this.handleLoginSubmit}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit}
+
           name={this.state.name}
           email={this.state.email}
           password={this.state.password}
