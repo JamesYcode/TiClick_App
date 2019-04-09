@@ -1,22 +1,37 @@
 import React from 'react';
 import Login from './Login';
-import { Route } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
+import Users from './Users';
+import RegisterForm from './RegisterForm';
 
 function Main(props) {
   const {
     handleChange,
-    user_name,
+    handleSubmit,
+    username,
     password,
+    users,
+    name,
+    email
   } = props;
   return(
     <div>
-      <Route path='/' render={() => (
-        <Login
-          handleChange={handleChange}
-          userName={user_name}
-          password={password}
+
+
+      <Link to='/users'>Get all Users</Link>
+      <Route path='/users' render={(props) => (
+        <Users
+          users={users}
         />
       )} />
+      <RegisterForm
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        name={name}
+        username={username}
+        password={password}
+        email={email}
+       />
     </div>
   )
 }
