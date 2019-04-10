@@ -5,7 +5,7 @@ function CategoriesList(props) {
     <div>
       {props.categoriesList.map((list) => (
         <div key={list.id}>
-          <p>{list.title}</p>
+        {list.user_id === props.currentUser.id && <p>{list.title}</p>}
         </div>
       ))}
     </div>

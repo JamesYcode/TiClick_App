@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
 import { withRouter } from 'react-router-dom'
-import { fetchAllUsers, createUser, loginUser } from './services/users';
+import { createUser, loginUser } from './services/users';
 import { fetchAllCategories, postCategory } from './services/categories'
 import decode from 'jwt-decode';
 
@@ -70,12 +70,12 @@ class App extends Component {
     this.setState({
       currentUser: currentUser
     })
-    this.props.history.push('/users')
+    this.props.history.push(`/users/${currentUser.id}`);
   }
 
   async handleLogout(e){
     localStorage.removeItem('jwt')
-    this.props.history.push(`/`);
+    this.props.history.push('/');
   }
 
   async handlePostCategory(e) {
@@ -97,13 +97,6 @@ class App extends Component {
     })
   }
 
-
-   async getAllUsers() {
-    const users = await fetchAllUsers();
-    this.setState({
-      users: users
-    })
-  }
 
   async getAllCategories() {
     const categories = await fetchAllCategories();
@@ -133,6 +126,7 @@ class App extends Component {
           users={this.state.users}
           title={this.state.title}
           categoriesList={this.state.categories}
+          currentUser={this.state.currentUser}
         />
       </div>
     );

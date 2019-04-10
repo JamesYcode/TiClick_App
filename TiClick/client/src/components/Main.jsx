@@ -19,7 +19,8 @@ function Main(props) {
     email,
     items,
     title,
-    categoriesList
+    categoriesList,
+    currentUser
   } = props;
 
   return(
@@ -57,6 +58,7 @@ function Main(props) {
       <Route path='/categories/list' render={(props) => (
         <CategoriesList
           categoriesList={categoriesList}
+          currentUser={currentUser}
         />
       )} />
     </div>
