@@ -1,12 +1,12 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
 
-  # GET /categories
+  # GET /user/:id/categories
   def index
     @categories = Category.all
-
     render json: @categories
   end
+  
 
   # GET /categories/1
   def show
@@ -14,11 +14,17 @@ class CategoriesController < ApplicationController
   end
 
   # POST /categories
-  def create
-    @category = Category.new(category_params)
+  def new
+    @user = User.find(params[:user_id])
+    @category = Category.new
+  end
 
+
+  def create
+    @user = User.find(params[:user_id])
+    @category = Category.new(category_params)
     if @category.save
-      render json: @category, status: :created, location: @category
+      render json: @category, status: :created
     else
       render json: @category.errors, status: :unprocessable_entity
     end
@@ -46,6 +52,6 @@ class CategoriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def category_params
-      params.fetch(:category, {})
+      params.require(:category).permit(:title, :user_id)
     end
 end

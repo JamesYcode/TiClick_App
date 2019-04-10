@@ -3,17 +3,23 @@ import { Link, Route } from 'react-router-dom';
 import Users from './Users';
 import RegisterForm from './forms/RegisterForm';
 import LoginForm from './forms/LoginForm';
+import CategoryForm from './forms/CategoryForm';
+import CategoriesList from './CategoriesList';
 
 function Main(props) {
   const {
     handleChange,
-    handleSubmit,
+    handleRegister,
     handleLoginSubmit,
+    handlePostCategory,
     username,
     password,
     users,
     name,
-    email
+    email,
+    items,
+    title,
+    categoriesList
   } = props;
 
   return(
@@ -31,7 +37,7 @@ function Main(props) {
       <Route path='/register' render={(props) => (
         <RegisterForm
           handleChange={handleChange}
-          handleSubmit={handleSubmit}
+          handleRegister={handleRegister}
           name={name}
           username={username}
           password={password}
@@ -39,11 +45,18 @@ function Main(props) {
          />
       )} />
 
+      <Route exact path='/categories' render={(props) => (
+        <CategoryForm
+          handleChange={handleChange}
+          handlePostCategory={handlePostCategory}
+          title={title}
+        />
+      )} />
 
-      <Link to='/users'>Get all Users</Link>
-      <Route path='/users' render={(props) => (
-        <Users
-          users={users}
+      <Link to='/categories/list'>Category List</Link>
+      <Route path='/categories/list' render={(props) => (
+        <CategoriesList
+          categoriesList={categoriesList}
         />
       )} />
     </div>

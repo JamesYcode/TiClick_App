@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
+  # skip_before_action :ensure_signed_in, only: [:create, :login]
 
   # GET /users
   def index
@@ -14,15 +15,65 @@ class UsersController < ApplicationController
   end
 
   # POST /users
-  def create
-    @user = User.new(user_params)
+  # def create
+  #   @user = User.new(user_params)
+  #
+  #   if @user.save
+  #     render json: @user, status: :created, location: @user
+  #   else
+  #     render json: @user.errors, status: :unprocessable_entity
+  #   end
+  # end
 
-    if @user.save
-      render json: @user, status: :created, location: @user
+  def gen_token(user_id)
+    payload = {id: user_id}
+    JWT.encode(payload, Rails.application.secrets.secret_key_base)
+  end
+
+  def create
+    email = params[:email]
+    password = params[:password]
+    name = params[:name]
+    username = params[:username]
+
+    new_user = User.new({
+      password: password,
+      email: email,
+      name: name,
+      username: username
+    })
+
+
+    if new_user.valid?
+      new_user.save!
+      user_data = {
+        name: user.name,
+        email: user.email,
+        username: user.username
+      }
+      render json: { user: user_data, token: gen_token(new_user.id)}
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render nothing: true, status: 401
     end
   end
+
+  def login
+    email = params[:email]
+    password = params[:password]
+
+    user = User.find_from_credentials email, password
+    if user.nil?
+      render nothing: true, status: 401
+    else
+      render json: {user: user, token: gen_token(user.id)}
+    end
+  end
+
+  def verify
+    ensure_signed_in
+    render json: { user: current_user }
+  end
+
 
   # PATCH/PUT /users/1
   def update

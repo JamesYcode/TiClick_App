@@ -3,35 +3,46 @@ import './App.css';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
+import { withRouter } from 'react-router-dom'
 import { fetchAllUsers, createUser, loginUser } from './services/users';
+import { fetchAllCategories, postCategory } from './services/categories'
+import decode from 'jwt-decode';
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
+      items: [],
+      categories: [],
+      currentUser: {},
       name: '',
       password: '',
       email: '',
       username: '',
+      title: '',
     }
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handlePostCategory = this.handlePostCategory.bind(this);
+    this.setCurrentUser = this.setCurrentUser.bind(this);
   }
 
   async componentDidMount() {
-    await this.getAllUsers();
+    await this.getAllCategories();
+    localStorage.getItem("jwt") && await this.setCurrentUser();
   }
 
-   async getAllUsers() {
-    const users = await fetchAllUsers();
+  handleChange(e) {
+    const { name, value } = e.target;
     this.setState({
-      users: users
+      [name]: value
     })
-  }
+  };
 
-  async handleSubmit(e) {
+  async handleRegister(e) {
     e.preventDefault();
     const newUser = await createUser({
       name: this.state.name,
@@ -49,48 +60,83 @@ class App extends Component {
   }
 
   async handleLoginSubmit(e) {
-    console.log('pants')
     e.preventDefault();
     const login = await loginUser({
       email: this.state.email,
       password: this.state.password
     });
+    const token = localStorage.setItem('jwt', login.jwt);
+    const currentUser = decode(login.jwt)
+    this.setState({
+      currentUser: currentUser
+    })
+    this.props.history.push('/users')
+  }
 
-    console.log(login)
-    localStorage.setItem('jwt', login.jwt);
-    this.setState(prevState => ({
-      users: [...prevState.users, login],
-      email: '',
-      password: ''
+  async handleLogout(e){
+    localStorage.removeItem('jwt')
+    this.props.history.push(`/`);
+  }
+
+  async handlePostCategory(e) {
+    e.preventDefault();
+    const newCategory = await postCategory({
+      title: this.state.title,
+      user_id: this.state.currentUser.id
+    });
+    this.setState((prevState) => ({
+      categories: [...prevState.categories, newCategory],
+      title: ''
     }));
   }
 
-  handleChange(e) {
-    const { name, value } = e.target;
+  async setCurrentUser() {
+    const currentUser = decode(localStorage.getItem("jwt"))
     this.setState({
-      [name]: value
+      currentUser: currentUser
     })
-  };
+  }
+
+
+   async getAllUsers() {
+    const users = await fetchAllUsers();
+    this.setState({
+      users: users
+    })
+  }
+
+  async getAllCategories() {
+    const categories = await fetchAllCategories();
+    this.setState({
+      categories
+    })
+  }
 
 
   render() {
+    console.log(this.state);
     return (
       <div className="App">
-        <Header />
+        <Header
+          handleLogout={this.handleLogout}
+        />
         <Main
           handleLoginSubmit={this.handleLoginSubmit}
           handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit}
+          handleRegister={this.handleRegister}
+          handlePostCategory={this.handlePostCategory}
 
           name={this.state.name}
           email={this.state.email}
           password={this.state.password}
           username={this.state.username}
           users={this.state.users}
+          title={this.state.title}
+          categoriesList={this.state.categories}
         />
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

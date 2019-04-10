@@ -1,9 +1,16 @@
 import React from 'react';
 
-function Header() {
+function Header(props) {
+  const {
+    handleLogout
+  } = props
   return(
     <div>
-      <h1>TiClick</h1>
+      <form>
+        <button onClick={props.handleLogout}>
+          Log Out
+        </button>
+      </form>
     </div>
   )
 }
