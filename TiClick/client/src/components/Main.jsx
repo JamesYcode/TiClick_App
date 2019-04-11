@@ -6,6 +6,7 @@ import LoginForm from './forms/LoginForm';
 import CategoryForm from './forms/CategoryForm';
 import CategoriesList from './CategoriesList';
 import ItemForm from './forms/ItemForm';
+import ItemsList from './ItemsList';
 
 function Main(props) {
   const {
@@ -25,9 +26,11 @@ function Main(props) {
     items,
     title,
     categoriesList,
+    itemsList,
     currentUser,
     userItem,
-    setCategoryId
+    setCategoryId,
+    getAllItems
   } = props;
 
   return(
@@ -74,6 +77,17 @@ function Main(props) {
           handlePostCategory={handlePostCategory}
           title={title}
           setCategoryId={setCategoryId}
+        />
+      )} />
+
+      <button onClick={() => {
+        getAllItems(currentUser.id, userItem.category_id)
+      }}><Link to='/users/items'>List of items</Link></button>
+      <Route exact path='/users/items' render={() => (
+        <ItemsList
+          items={items}
+          currentUser={currentUser}
+          itemsList={itemsList}
         />
       )} />
     </div>

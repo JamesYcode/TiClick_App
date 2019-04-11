@@ -16,10 +16,10 @@ function CategoriesList(props) {
     <div>
       {props.categoriesList.map((list) => (
         <div key={list.id}>
-        { list.user_id == currentUser.id && <p>{list.title}</p>}
-        {list.user_id == currentUser.id && <input type='submit' value='create item' onClick={() => {
+          <p>{list.title}</p>
+        <input type='submit' value='create item' onClick={() => {
           setCategoryId(list.id)
-        }} />}
+        }} />
         </div>
       ))}
 

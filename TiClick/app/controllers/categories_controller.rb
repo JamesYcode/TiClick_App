@@ -3,10 +3,11 @@ class CategoriesController < ApplicationController
 
   # GET /user/:id/categories
   def index
-    @categories = Category.all
+    @user = User.find(params[:user_id])
+    @categories = @user.categories.all
     render json: @categories
   end
-  
+
 
   # GET /categories/1
   def show

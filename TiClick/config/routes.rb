@@ -7,7 +7,4 @@ Rails.application.routes.draw do
       resources :items
     end
   end
-  resources :categories do
-    resources :items
-  end
 end

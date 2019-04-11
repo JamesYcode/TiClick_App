@@ -37,15 +37,24 @@ class App extends Component {
     this.handlePostItem = this.handlePostItem.bind(this);
     this.setCurrentUser = this.setCurrentUser.bind(this);
     this.handleItemChange = this.handleItemChange.bind(this);
-    this.handleSelectCategory = this.handleSelectCategory.bind(this);
-    this.handleSubmitCategory = this.handleSubmitCategory.bind(this);
+    // this.handleSelectCategory = this.handleSelectCategory.bind(this);
+    // this.handleSubmitCategory = this.handleSubmitCategory.bind(this);
     this.setCategoryId = this.setCategoryId.bind(this);
+    this.getAllItems = this.getAllItems.bind(this);
   }
 
   async componentDidMount() {
-    await this.getAllCategories();
     localStorage.getItem("jwt") && await this.setCurrentUser();
+    await this.getAllCategories(this.state.currentUser.id);
   }
+
+  async setCurrentUser() {
+    const currentUser = decode(localStorage.getItem("jwt"))
+    this.setState({
+      currentUser: currentUser
+    })
+  }
+
 
   handleChange(e) {
     const { name, value } = e.target;
@@ -64,20 +73,20 @@ class App extends Component {
     }));
   }
 
-  handleSelectCategory(e) {
-    this.setState({
-      title: e.target.value,
-      userItem: {
-        category_id: e.target.id
-      }
-    });
-  }
-
-  handleSubmitCategory(e) {
-    e.preventDefault();
-
-    this.props.history.push('/users/create/inventory/items')
-  }
+  // handleSelectCategory(e) {
+  //   this.setState({
+  //     title: e.target.value,
+  //     userItem: {
+  //       category_id: e.target.id
+  //     }
+  //   });
+  // }
+  //
+  // handleSubmitCategory(e) {
+  //   e.preventDefault();
+  //
+  //   this.props.history.push('/users/create/inventory/items')
+  // }
 
   setCategoryId(id) {
     this.setState({
@@ -85,7 +94,6 @@ class App extends Component {
         category_id: id
       }
     });
-    console.log(id);
     this.props.history.push('/users/create/inventory/items')
   }
 
@@ -118,12 +126,16 @@ class App extends Component {
     this.setState({
       currentUser: currentUser
     })
+    await this.getAllCategories(this.state.currentUser.id);
     this.props.history.push(`/users/${currentUser.id}`);
   }
 
   async handleLogout(e){
     localStorage.removeItem('jwt')
     this.props.history.push('/');
+    this.setState({
+      currentUser: null
+    })
   }
 
   async handlePostCategory(e) {
@@ -140,40 +152,39 @@ class App extends Component {
   }
 
   async handlePostItem(e) {
+    console.log('clicked');
     e.preventDefault();
-    const newItem = await postItem(this.state.userItem)
+    const newItem = await postItem(this.state.userItem, this.state.currentUser.id)
     this.setState((prevState) => ({
       items: [...prevState.items, newItem],
       userItem: {
+        ...prevState.userItem,
         title: '',
         description: '',
         quantity: '',
-        category_id: ''
       }
     }));
-    this.props.history.push(`/users/${this.state.currentUser.id}`)
+    // this.props.history.push(`/users/${this.state.currentUser.id}`)
   }
 
 
-
-  async setCurrentUser() {
-    const currentUser = decode(localStorage.getItem("jwt"))
-    this.setState({
-      currentUser: currentUser
-    })
-  }
-
-
-  async getAllCategories() {
-    const categories = await fetchAllCategories();
+  async getAllCategories(id) {
+    const categories = await fetchAllCategories(id);
     this.setState({
       categories
+    });
+  }
+
+  async getAllItems(id, idTwo) {
+    const items = await fetchAllItems(id, idTwo)
+    this.setState({
+      items
     })
   }
 
 
   render() {
-    // console.log(this.state);
+    console.log(this.state);
     // console.log(this.state.currentUser);
     return (
       <div className="App">
@@ -198,10 +209,13 @@ class App extends Component {
           users={this.state.users}
           title={this.state.title}
           categoriesList={this.state.categories}
+          itemsList={this.state.items}
           currentUser={this.state.currentUser}
           userItem={this.state.userItem}
+          items={this.state.items}
 
           setCategoryId={this.setCategoryId}
+          getAllItems={this.getAllItems}
         />
       </div>
     );
