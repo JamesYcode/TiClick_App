@@ -5,6 +5,7 @@ import RegisterForm from './forms/RegisterForm';
 import LoginForm from './forms/LoginForm';
 import CategoryForm from './forms/CategoryForm';
 import CategoriesList from './CategoriesList';
+import ItemForm from './forms/ItemForm';
 
 function Main(props) {
   const {
@@ -12,6 +13,10 @@ function Main(props) {
     handleRegister,
     handleLoginSubmit,
     handlePostCategory,
+    handlePostItem,
+    handleItemChange,
+    handleSelectCategory,
+    handleSubmitCategory,
     username,
     password,
     users,
@@ -20,7 +25,9 @@ function Main(props) {
     items,
     title,
     categoriesList,
-    currentUser
+    currentUser,
+    userItem,
+    setCategoryId
   } = props;
 
   return(
@@ -35,7 +42,7 @@ function Main(props) {
          />
       )} />
 
-      <Route path='/register' render={(props) => (
+      <Route exact path='/register' render={(props) => (
         <RegisterForm
           handleChange={handleChange}
           handleRegister={handleRegister}
@@ -46,19 +53,27 @@ function Main(props) {
          />
       )} />
 
-      <Route exact path='/categories' render={(props) => (
-        <CategoryForm
-          handleChange={handleChange}
-          handlePostCategory={handlePostCategory}
-          title={title}
+      <Route exact path='/users/create/inventory/items' render={(props) => (
+        <ItemForm
+          handleItemChange={handleItemChange}
+          handlePostItem={handlePostItem}
+          userItem={userItem}
         />
       )} />
 
-      <Link to='/categories/list'>Category List</Link>
-      <Route path='/categories/list' render={(props) => (
+
+
+      <Link to='/users/create/new/inventory'>Create Inventory</Link>
+      <Route exact path='/users/create/new/inventory' render={(props) => (
         <CategoriesList
           categoriesList={categoriesList}
           currentUser={currentUser}
+          handleChange={handleChange}
+          handleSelectCategory={handleSelectCategory}
+          handleSubmitCategory={handleSubmitCategory}
+          handlePostCategory={handlePostCategory}
+          title={title}
+          setCategoryId={setCategoryId}
         />
       )} />
     </div>

@@ -14,11 +14,14 @@ class ItemsController < ApplicationController
   end
 
   # POST /items
+
+
   def create
+    @category = Category.find(params[:category_id])
     @item = Item.new(item_params)
 
     if @item.save
-      render json: @item, status: :created, location: @item
+      render json: @item, status: :created
     else
       render json: @item.errors, status: :unprocessable_entity
     end
@@ -46,6 +49,6 @@ class ItemsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def item_params
-      params.fetch(:item, {})
+      params.require(:item).permit(:title, :description, :quantity, :category_id)
     end
 end

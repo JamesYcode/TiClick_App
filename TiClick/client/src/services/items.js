@@ -1,8 +1,17 @@
-// {import api from './api-helper';
-//
-// const fetchAllItems = async (userId, categoryId) => {
-//   const resp = await api.get(`/users/${userId}/categories/${categoryId}/items`);
-//   return resp.data;
-// };
-//
-// export default fetchAllItems;}
+import api from './api-helper';
+
+const fetchAllItems = async (data) => {
+  const resp = await api.get(`/categories/${data.category_id}/items`);
+  return resp.data;
+}
+
+const postItem = async (data) => {
+  const resp = await api.post(`/categories/${data.category_id}/items`, data);
+  return resp.data;
+}
+
+
+export {
+  fetchAllItems,
+  postItem
+};
