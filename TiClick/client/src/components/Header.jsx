@@ -6,11 +6,14 @@ function Header(props) {
   } = props
   return(
     <div>
-      <form>
-        <button onClick={props.handleLogout}>
-          Log Out
-        </button>
-      </form>
+      <header>
+        <h1>TiClick App</h1>
+      </header>
+        <form>
+          <button id='logout-button' onClick={props.handleLogout}>
+            Log Out
+          </button>
+        </form>
     </div>
   )
 }

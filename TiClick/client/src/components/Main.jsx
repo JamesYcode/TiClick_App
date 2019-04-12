@@ -30,7 +30,10 @@ function Main(props) {
     currentUser,
     userItem,
     setCategoryId,
-    getAllItems
+    getAllItems,
+    destroyCategory,
+    setCategoryFormData,
+    editCategorySubmit
   } = props;
 
   return(
@@ -77,6 +80,9 @@ function Main(props) {
           handlePostCategory={handlePostCategory}
           title={title}
           setCategoryId={setCategoryId}
+          destroyCategory={destroyCategory}
+          setCategoryFormData={setCategoryFormData}
+          editCategorySubmit={editCategorySubmit}
         />
       )} />
 

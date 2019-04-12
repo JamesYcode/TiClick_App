@@ -10,7 +10,7 @@ function ItemsList(props) {
     <div>
       {props.itemsList.map(list => (
         <div key={list.id}>
-          <p>{list.title}</p>
+          <p><strong>Title:</strong> {list.title} <strong>Description:</strong> {list.description} <strong>Quantity:</strong> {list.quantity}</p>
         </div>
       ))}
     </div>

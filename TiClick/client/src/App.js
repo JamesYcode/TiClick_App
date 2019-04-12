@@ -3,11 +3,12 @@ import './App.css';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import { withRouter } from 'react-router-dom'
+import { withRouter, Route } from 'react-router-dom'
 import { createUser, loginUser } from './services/users';
-import { fetchAllCategories, postCategory } from './services/categories'
+import { fetchAllCategories, postCategory, deleteCategory, editCategory } from './services/categories'
 import { postItem, fetchAllItems } from './services/items';
 import decode from 'jwt-decode';
+import EditCategoryForm from './components/forms/EditCategoryForm';
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +17,10 @@ class App extends Component {
       users: [],
       items: [],
       categories: [],
+      selectedCategories: {
+        title: '',
+        user_id: ''
+      },
       currentUser: {},
       userItem: {
         title: '',
@@ -41,11 +46,16 @@ class App extends Component {
     // this.handleSubmitCategory = this.handleSubmitCategory.bind(this);
     this.setCategoryId = this.setCategoryId.bind(this);
     this.getAllItems = this.getAllItems.bind(this);
+    this.getAllCategories = this.getAllCategories.bind(this);
+    this.destroyCategory = this.destroyCategory.bind(this);
+    this.editCategorySubmit = this.editCategorySubmit.bind(this);
+    this.setCategoryFormData = this.setCategoryFormData.bind(this);
+    this.handleEditChange = this.handleEditChange.bind(this)
   }
 
   async componentDidMount() {
     localStorage.getItem("jwt") && await this.setCurrentUser();
-    await this.getAllCategories(this.state.currentUser.id);
+    localStorage.getItem("jwt") && await this.getAllCategories(this.state.currentUser.id);
   }
 
   async setCurrentUser() {
@@ -61,6 +71,16 @@ class App extends Component {
     this.setState({
       [name]: value
     })
+  };
+
+  handleEditChange(e) {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      selectedCategories:{
+        ...prevState.selectedCategories,
+        [name]: value
+      }
+    }))
   };
 
   handleItemChange(e) {
@@ -92,7 +112,7 @@ class App extends Component {
     this.setState({
       userItem: {
         category_id: id
-      }
+      },
     });
     this.props.history.push('/users/create/inventory/items')
   }
@@ -152,7 +172,6 @@ class App extends Component {
   }
 
   async handlePostItem(e) {
-    console.log('clicked');
     e.preventDefault();
     const newItem = await postItem(this.state.userItem, this.state.currentUser.id)
     this.setState((prevState) => ({
@@ -164,7 +183,35 @@ class App extends Component {
         quantity: '',
       }
     }));
-    // this.props.history.push(`/users/${this.state.currentUser.id}`)
+    this.props.history.push(`/users/${this.state.currentUser.id}`)
+  }
+
+  async editCategorySubmit(e) {
+    e.preventDefault();
+    const updateCategory = await editCategory(
+      this.state.selectedCategories
+    );
+    this.setState(prevState =>({
+      categories: [
+        ...prevState.categories.filter(category => category.id !== updateCategory.id),
+        updateCategory
+      ]
+    }));
+    await this.getAllCategories(this.state.selectedCategories.user_id);
+    {
+      window.location.reload();
+    }
+  }
+
+  setCategoryFormData(data) {
+    this.setState({
+      selectedCategories: {
+        title: data.title,
+        id: data.id,
+        user_id: data.user_id
+      }
+    });
+    this.props.history.push('/users/edit/category')
   }
 
 
@@ -182,10 +229,20 @@ class App extends Component {
     })
   }
 
+async destroyCategory(user_id, id) {
+  const destroyCategory = await deleteCategory(user_id, id);
+  this.setState(prevState => ({
+    categories: prevState.categories.filter(
+      category => category.id !== id
+    )
+  }))
+  this.props.history.push('/users/create/new/inventory')
+}
+
+
 
   render() {
     console.log(this.state);
-    // console.log(this.state.currentUser);
     return (
       <div className="App">
         <Header
@@ -202,6 +259,9 @@ class App extends Component {
           handleSelectCategory={this.handleSelectCategory}
           handleSubmitCategory={this.handleSubmitCategory}
 
+          destroyCategory={this.destroyCategory}
+          getAllCategories={this.getAllCategories}
+
           name={this.state.name}
           email={this.state.email}
           password={this.state.password}
@@ -216,7 +276,19 @@ class App extends Component {
 
           setCategoryId={this.setCategoryId}
           getAllItems={this.getAllItems}
+          setCategoryFormData={this.setCategoryFormData}
+          selectedCategories={this.state.selectedCategories}
+          editCategorySubmit={this.editCategorySubmit}
         />
+
+        <Route exact path='/users/edit/category' render={() => (
+          <EditCategoryForm
+            editCategorySubmit={this.editCategorySubmit}
+            handleEditChange={this.handleEditChange}
+            handleChange={this.handleChange}
+            title={this.state.selectedCategories.title}
+          />
+        )} />
       </div>
     );
   }

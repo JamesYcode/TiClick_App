@@ -10,7 +10,20 @@ const postCategory = async (data) => {
   return resp.data;
 }
 
+const deleteCategory = async (user_id, id) => {
+  const resp = await api.delete(`/users/${user_id}/categories/${id}`)
+  return resp.data
+}
+
+const editCategory = async (data) => {
+  console.log("edit cat", data);
+  const resp = await api.put(`/users/${data.user_id}/categories/${data.id}`, {category: data})
+  return resp.data
+}
+
 export {
   fetchAllCategories,
-  postCategory
+  postCategory,
+  deleteCategory,
+  editCategory
 }

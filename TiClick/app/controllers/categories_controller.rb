@@ -33,7 +33,8 @@ class CategoriesController < ApplicationController
 
   # PATCH/PUT /categories/1
   def update
-    if @category.update(category_params)
+    @category = Category.find(params[:id])
+    if @category.update!(category_params)
       render json: @category
     else
       render json: @category.errors, status: :unprocessable_entity
@@ -42,6 +43,7 @@ class CategoriesController < ApplicationController
 
   # DELETE /categories/1
   def destroy
+    @user = User.find(params[:user_id])
     @category.destroy
   end
 
@@ -53,6 +55,6 @@ class CategoriesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def category_params
-      params.require(:category).permit(:title, :user_id)
+      params.require(:category).permit(:title, :user_id, :id)
     end
 end
