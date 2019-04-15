@@ -69,7 +69,7 @@ function Main(props) {
 
 
 
-      <Link to='/users/create/new/inventory'>Create Inventory</Link>
+      {currentUser.id && <Link to='/users/create/new/inventory'>Create Inventory</Link>}
       <Route exact path='/users/create/new/inventory' render={(props) => (
         <CategoriesList
           categoriesList={categoriesList}
@@ -86,9 +86,9 @@ function Main(props) {
         />
       )} />
 
-      <button onClick={() => {
+      {currentUser.id && <button onClick={() => {
         getAllItems(currentUser.id, userItem.category_id)
-      }}><Link to='/users/items'>List of items</Link></button>
+      }}><Link to='/users/items'>List of items</Link></button>}
       <Route exact path='/users/items' render={() => (
         <ItemsList
           items={items}

@@ -2,18 +2,19 @@ import React from 'react';
 
 function Header(props) {
   const {
-    handleLogout
+    handleLogout,
+    currentUser
   } = props
   return(
     <div>
-      <header>
-        <h1>TiClick App</h1>
+      <header className='main-header'>
+        <h1>Inventory App</h1>
       </header>
-        <form>
+        {currentUser.id && <form>
           <button id='logout-button' onClick={props.handleLogout}>
             Log Out
           </button>
-        </form>
+        </form>}
     </div>
   )
 }

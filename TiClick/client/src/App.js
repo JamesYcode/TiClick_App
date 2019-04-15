@@ -153,9 +153,9 @@ class App extends Component {
   async handleLogout(e){
     localStorage.removeItem('jwt')
     this.props.history.push('/');
-    this.setState({
-      currentUser: null
-    })
+    // this.setState({
+    //   currentUser: {}
+    // })
   }
 
   async handlePostCategory(e) {
@@ -247,6 +247,8 @@ async destroyCategory(user_id, id) {
       <div className="App">
         <Header
           handleLogout={this.handleLogout}
+          currentUser={this.state.currentUser}
+
         />
         <Main
           {...this.props}
