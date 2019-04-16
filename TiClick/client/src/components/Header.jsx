@@ -7,14 +7,14 @@ function Header(props) {
   } = props
   return(
     <div>
-      <header className='main-header'>
-        <h1>Inventory App</h1>
-      </header>
-        {currentUser.id && <form>
+      {currentUser.id && <header className='main-header'>
+        <h3 id='welcome-user'>Welcome {currentUser.name}</h3>
+        <form className='main-logout'>
           <button id='logout-button' onClick={props.handleLogout}>
             Log Out
           </button>
-        </form>}
+        </form>
+      </header>}
     </div>
   )
 }

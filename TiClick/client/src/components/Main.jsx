@@ -7,6 +7,7 @@ import CategoryForm from './forms/CategoryForm';
 import CategoriesList from './CategoriesList';
 import ItemForm from './forms/ItemForm';
 import ItemsList from './ItemsList';
+import EditCategoryForm from './forms/EditCategoryForm';
 
 function Main(props) {
   const {
@@ -33,7 +34,9 @@ function Main(props) {
     getAllItems,
     destroyCategory,
     setCategoryFormData,
-    editCategorySubmit
+    editCategorySubmit,
+    handleEditChange,
+    selectedCategories
   } = props;
 
   return(
@@ -59,36 +62,56 @@ function Main(props) {
          />
       )} />
 
-      <Route exact path='/users/create/inventory/items' render={(props) => (
-        <ItemForm
-          handleItemChange={handleItemChange}
-          handlePostItem={handlePostItem}
-          userItem={userItem}
-        />
-      )} />
+      <div className='nav'>
+        {currentUser.id && <nav className='main-nav'>
+          {currentUser.id && <Link id='create-inventory' to='/users/create/new/inventory'>Create Inventory</Link>}
+          {currentUser.id && <button id='item-list' onClick={() => {
+            getAllItems(currentUser.id, userItem.category_id)
+          }}><Link id='item-list-link' to='/users/items'>List of items</Link></button>}
+        </nav>}
 
+        <Route exact path='/users/create/new/inventory' render={(props) => (
+          <CategoriesList
+            categoriesList={categoriesList}
+            currentUser={currentUser}
+            handleChange={handleChange}
+            handleSelectCategory={handleSelectCategory}
+            handleSubmitCategory={handleSubmitCategory}
+            handlePostCategory={handlePostCategory}
+            title={title}
+            setCategoryId={setCategoryId}
+            destroyCategory={destroyCategory}
+            setCategoryFormData={setCategoryFormData}
+            editCategorySubmit={editCategorySubmit}
+          />
+        )} />
 
+        <div className='category-form'>
+          <Route exact path='/users/create/new/inventory' render={() => (
+            <CategoryForm
+              handleChange={handleChange}
+              handlePostCategory={handlePostCategory}
+              title={title}
+            />
+          )} />
+          <Route exact path = '/users/create/new/inventory' render={() => (
+            <EditCategoryForm
+              editCategorySubmit={editCategorySubmit}
+              handleEditChange={handleEditChange}
+              handleChange={handleChange}
+              title={selectedCategories.title}
+            />
+          )} />
+        </div>
+        <Route exact path='/users/create/inventory/items' render={(props) => (
+          <ItemForm
+            handleItemChange={handleItemChange}
+            handlePostItem={handlePostItem}
+            userItem={userItem}
+          />
+        )} />
+      </div>
 
-      {currentUser.id && <Link to='/users/create/new/inventory'>Create Inventory</Link>}
-      <Route exact path='/users/create/new/inventory' render={(props) => (
-        <CategoriesList
-          categoriesList={categoriesList}
-          currentUser={currentUser}
-          handleChange={handleChange}
-          handleSelectCategory={handleSelectCategory}
-          handleSubmitCategory={handleSubmitCategory}
-          handlePostCategory={handlePostCategory}
-          title={title}
-          setCategoryId={setCategoryId}
-          destroyCategory={destroyCategory}
-          setCategoryFormData={setCategoryFormData}
-          editCategorySubmit={editCategorySubmit}
-        />
-      )} />
-
-      {currentUser.id && <button onClick={() => {
-        getAllItems(currentUser.id, userItem.category_id)
-      }}><Link to='/users/items'>List of items</Link></button>}
       <Route exact path='/users/items' render={() => (
         <ItemsList
           items={items}

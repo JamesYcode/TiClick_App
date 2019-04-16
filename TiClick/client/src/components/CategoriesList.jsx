@@ -18,25 +18,20 @@ function CategoriesList(props) {
     editCategorySubmit
   } = props
   return(
-    <div>
+    <div className='catagory-list'>
       {props.categoriesList.map((list) => (
-        <div key={list.id}>
+        <div id='category-list-map' key={list.id}>
           <p>{list.title}</p>
-        <input type='submit' value='Create Item' onClick={() => {
+        <input id='category-list-create' type='submit' value='Create Item' onClick={() => {
           setCategoryId(list.id)
         }} />
-        <input type='submit' value='Delete Category' onClick={() => destroyCategory(list.user_id, list.id)} />
-        <input type='submit' value='Edit Category' onClick={() => setCategoryFormData(list)} />
+        <br/>
+        <input id='category-list-delete' type='submit' value='Delete Category' onClick={() => destroyCategory(list.user_id, list.id)} />
+        <br/>
+        <input id='category-list-edit' type='submit' value='Edit Category' onClick={() => setCategoryFormData(list)} />
+        <br/>
         </div>
       ))}
-
-      <Route exact path='/users/create/new/inventory' render={() => (
-        <CategoryForm
-          handleChange={handleChange}
-          handlePostCategory={handlePostCategory}
-          title={title}
-        />
-      )} />
     </div>
   )
 }

@@ -125,14 +125,17 @@ class App extends Component {
       email: this.state.email,
       username: this.state.username
     });
+    const token = localStorage.setItem('jwt', newUser.jwt);
+    const currentUser = decode(newUser.jwt)
     this.setState(prevState => ({
       users: [...prevState.users, newUser],
       name: '',
       password: '',
       email: '',
-      username: ''
+      username: '',
+      currentUser: currentUser
     }));
-    this.props.history.push(`/users/${newUser.id}`)
+    this.props.history.push('/users/profile')
   }
 
   async handleLoginSubmit(e) {
@@ -147,7 +150,7 @@ class App extends Component {
       currentUser: currentUser
     })
     await this.getAllCategories(this.state.currentUser.id);
-    this.props.history.push(`/users/${currentUser.id}`);
+    this.props.history.push('/users/profile');
   }
 
   async handleLogout(e){
@@ -183,7 +186,7 @@ class App extends Component {
         quantity: '',
       }
     }));
-    this.props.history.push(`/users/${this.state.currentUser.id}`)
+    this.props.history.push('/users/create/new/inventory');
   }
 
   async editCategorySubmit(e) {
@@ -198,9 +201,6 @@ class App extends Component {
       ]
     }));
     await this.getAllCategories(this.state.selectedCategories.user_id);
-    {
-      window.location.reload();
-    }
   }
 
   setCategoryFormData(data) {
@@ -211,7 +211,7 @@ class App extends Component {
         user_id: data.user_id
       }
     });
-    this.props.history.push('/users/edit/category')
+    this.props.history.push('/users/create/new/inventory')
   }
 
 
@@ -281,16 +281,11 @@ async destroyCategory(user_id, id) {
           setCategoryFormData={this.setCategoryFormData}
           selectedCategories={this.state.selectedCategories}
           editCategorySubmit={this.editCategorySubmit}
+          selectedCategories={this.state.selectedCategories}
+          handleEditChange={this.handleEditChange}
         />
 
-        <Route exact path='/users/edit/category' render={() => (
-          <EditCategoryForm
-            editCategorySubmit={this.editCategorySubmit}
-            handleEditChange={this.handleEditChange}
-            handleChange={this.handleChange}
-            title={this.state.selectedCategories.title}
-          />
-        )} />
+
       </div>
     );
   }

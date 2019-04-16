@@ -6,9 +6,69 @@ html {
   height: 100%;
   width: 100%;
   color: #55495b;
+  background-color: rgba(211, 211, 211, .3);
 }
 
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  /* color: #fff; */
+}
+
+/* links (Temporary) */
+#create-inventory:visited {
+  color: #fff;
+}
+
+
+/* login form styles */
+
 .login-form-main{
+  text-align: center;
+  border: 2px solid #D3D3D3;
+  border-radius: 1em;
+  width: 30vw;
+  margin: 10% auto;
+  height: 30vh;
+  list-style-type: none;
+  font-size: 100%;
+  background-color: rgba(211, 211, 211, .7);
+}
+
+#login-email {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#login-email::placeholder {
+  text-align: center;
+}
+
+#login-pass {
+  margin-bottom: 2vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#login-pass::placeholder {
+  text-align: center;
+}
+
+#login-button {
+  width: 5vw;
+}
+
+#login-register-form-button {
+  width: 4.5vw;
+}
+
+/* register form */
+
+.register-form {
   text-align: center;
   border: 2px solid #D3D3D3;
   border-radius: 1em;
@@ -18,4 +78,206 @@ html {
   list-style-type: none;
   font-size: 100%;
   background-color: rgba(211, 211, 211, .7);
+}
+
+#register-name-form {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  margin-bottom: 2vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#register-email-form {
+  margin-bottom: 1vh;
+  margin-bottom: 2vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#register-username-form {
+  margin-bottom: 1vh;
+  margin-bottom: 2vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#register-pass-form {
+  margin-bottom: 1vh;
+  margin-bottom: 2vh;
+  height: 2vh;
+  width: 10vw;
+}
+
+#register-button-form {
+  width: 5vw;
+}
+
+/* main header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-color: #1898cc;
+}
+
+#welcome-user {
+  margin-left: 5vw;
+  font-size: 1.5em;
+}
+
+/* Header logout button */
+#logout-button {
+  width: 5.5vw;
+  height: 8vh;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  font-size: 1.25em;
+}
+
+
+.main-logout {
+  height: 5vh;
+  width: auto;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+/* main nav */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  /* height: 100vh; */
+}
+
+.main-nav {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  width: 25vw;
+  background-color: #2b2a2a;
+}
+
+/* create inventory button */
+#create-inventory {
+  font-size: 1.25em;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  /* margin-left: -8.5vw; */
+}
+
+#item-list {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  font-size: 1.25em;
+  margin-top: 2vh;
+  /* margin-left: -10.5vw; */
+}
+
+#item-list-link {
+  color: #fff;
+}
+
+#item-list-link:link {
+  color: #fff;
+}
+
+#item-list-link:visited {
+  color: #fff;
+}
+
+/* Category List */
+.catagory-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 2vw;
+  height: 100vh;
+  width: 100vw;
+}
+
+#category-list-map {
+  width: 22.5vw;
+  border-bottom: 1px solid;
+}
+
+#category-list-create {
+  margin-top: 2vh;
+  margin-bottom: 1.5vh;
+  width: 10vw;
+  height: 1vh;
+  margin-right: 1vw;
+}
+
+#category-list-delete {
+  margin-top: 2vh;
+  margin-bottom: 1.5vh;
+  width: 10vw;
+  height: 1vh;
+  margin-right: 1vw;
+}
+
+#category-list-edit {
+  margin-top: 2vh;
+  margin-bottom: 1.5vh;
+  width: 10vw;
+  height: 1vh;
+  margin-right: 1vw;
+}
+
+/* category form */
+.category-form {
+  width: 20vw;
+  margin-top: 2vh;
+}
+
+#edit-category-form {
+  margin-top: 1vh;
+}
+
+/* Item Form */
+#item-form {
+  box-shadow: 5px 5px 5px grey;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 40vw;
+  height: 50vh;
+  margin-right: 30vw;
+  /* margin-left: 10vw; */
+}
+
+.main-item-form {
+  margin-top: 5vh;
+}
+
+.main-item-form input::placeholder {
+  text-align: center;
+}
+
+#item-form-title {
+  margin-top: 2vh;
+  width: 20vw;
+  height: 2vh;
+}
+
+#item-form-description {
+  margin-top: 2vh;
+  width: 20vw;
+  height: 2vh;
+}
+
+#item-form-quantity {
+  margin-top: 2vh;
+  margin-bottom: 1.5vh;
+  width: 20vw;
+  height: 2vh;
 }

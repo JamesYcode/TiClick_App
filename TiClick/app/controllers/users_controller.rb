@@ -69,6 +69,21 @@ class UsersController < ApplicationController
     end
   end
 
+  def register
+    username = params[:username]
+    name = params[:name]
+    email = params[:email]
+    password = params[:password]
+
+    user = User.find_from_credentials email, password, name, username
+    if user.nil?
+      render nothing: true, status: 401
+    else
+      render json: {user: user, token: gen_token(user.id)}
+    end
+  end
+
+
   def verify
     ensure_signed_in
     render json: { user: current_user }

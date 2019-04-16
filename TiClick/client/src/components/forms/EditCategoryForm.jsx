@@ -9,7 +9,7 @@ function EditCategoryForm(props) {
     handleEditChange
   } = props
   return(
-    <div>
+    <div id='edit-category-form'>
       <form onSubmit={editCategorySubmit}>
         <input onChange={handleEditChange} type='text' placeholder='title' name='title' value={props.title}/>
         <input type='submit' value='submit' />
