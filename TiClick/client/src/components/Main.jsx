@@ -8,6 +8,7 @@ import CategoriesList from './CategoriesList';
 import ItemForm from './forms/ItemForm';
 import ItemsList from './ItemsList';
 import EditCategoryForm from './forms/EditCategoryForm';
+import Profile from './Profile';
 
 function Main(props) {
   const {
@@ -62,6 +63,15 @@ function Main(props) {
          />
       )} />
 
+
+
+
+
+
+
+
+
+      
       <div className='nav'>
         {currentUser.id && <nav className='main-nav'>
           {currentUser.id && <Link id='create-inventory' to='/users/create/new/inventory'>Create Inventory</Link>}
@@ -86,6 +96,16 @@ function Main(props) {
           />
         )} />
 
+
+        <Route exact path='/users/create/inventory/items' render={(props) => (
+          <ItemForm
+            handleItemChange={handleItemChange}
+            handlePostItem={handlePostItem}
+            userItem={userItem}
+          />
+        )} />
+
+
         <div className='category-form'>
           <Route exact path='/users/create/new/inventory' render={() => (
             <CategoryForm
@@ -94,7 +114,7 @@ function Main(props) {
               title={title}
             />
           )} />
-          <Route exact path = '/users/create/new/inventory' render={() => (
+          <Route exact path='/users/create/new/inventory' render={() => (
             <EditCategoryForm
               editCategorySubmit={editCategorySubmit}
               handleEditChange={handleEditChange}
@@ -103,14 +123,18 @@ function Main(props) {
             />
           )} />
         </div>
-        <Route exact path='/users/create/inventory/items' render={(props) => (
-          <ItemForm
-            handleItemChange={handleItemChange}
-            handlePostItem={handlePostItem}
-            userItem={userItem}
-          />
-        )} />
       </div>
+
+
+
+
+
+
+
+
+
+
+
 
       <Route exact path='/users/items' render={() => (
         <ItemsList
