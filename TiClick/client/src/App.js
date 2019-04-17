@@ -3,12 +3,11 @@ import './App.css';
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import { withRouter, Route } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { createUser, loginUser } from './services/users';
 import { fetchAllCategories, postCategory, deleteCategory, editCategory } from './services/categories'
-import { postItem, fetchAllItems } from './services/items';
+import { postItem, fetchItems, fetchAllItems } from './services/items';
 import decode from 'jwt-decode';
-import EditCategoryForm from './components/forms/EditCategoryForm';
 
 class App extends Component {
   constructor(props) {
@@ -42,15 +41,14 @@ class App extends Component {
     this.handlePostItem = this.handlePostItem.bind(this);
     this.setCurrentUser = this.setCurrentUser.bind(this);
     this.handleItemChange = this.handleItemChange.bind(this);
-    // this.handleSelectCategory = this.handleSelectCategory.bind(this);
-    // this.handleSubmitCategory = this.handleSubmitCategory.bind(this);
     this.setCategoryId = this.setCategoryId.bind(this);
-    this.getAllItems = this.getAllItems.bind(this);
     this.getAllCategories = this.getAllCategories.bind(this);
     this.destroyCategory = this.destroyCategory.bind(this);
     this.editCategorySubmit = this.editCategorySubmit.bind(this);
     this.setCategoryFormData = this.setCategoryFormData.bind(this);
     this.handleEditChange = this.handleEditChange.bind(this)
+    this.getItems = this.getItems.bind(this);
+    this.getAllItems = this.getAllItems.bind(this);
   }
 
   async componentDidMount() {
@@ -93,30 +91,6 @@ class App extends Component {
     }));
   }
 
-  // handleSelectCategory(e) {
-  //   this.setState({
-  //     title: e.target.value,
-  //     userItem: {
-  //       category_id: e.target.id
-  //     }
-  //   });
-  // }
-  //
-  // handleSubmitCategory(e) {
-  //   e.preventDefault();
-  //
-  //   this.props.history.push('/users/create/inventory/items')
-  // }
-
-  setCategoryId(id) {
-    this.setState({
-      userItem: {
-        category_id: id
-      },
-    });
-    this.props.history.push('/users/create/inventory/items')
-  }
-
   async handleRegister(e) {
     e.preventDefault();
     const newUser = await createUser({
@@ -125,17 +99,15 @@ class App extends Component {
       email: this.state.email,
       username: this.state.username
     });
-    const token = localStorage.setItem('jwt', newUser.jwt);
-    const currentUser = decode(newUser.jwt)
     this.setState(prevState => ({
       users: [...prevState.users, newUser],
       name: '',
       password: '',
       email: '',
-      username: '',
-      currentUser: currentUser
+      username: ''
     }));
-    this.props.history.push('/users/profile')
+    this.props.history.push('/')
+    alert('Please Login');
   }
 
   async handleLoginSubmit(e) {
@@ -150,15 +122,12 @@ class App extends Component {
       currentUser: currentUser
     })
     await this.getAllCategories(this.state.currentUser.id);
-    this.props.history.push('/users/profile');
+    this.props.history.push('/user/profile');
   }
 
   async handleLogout(e){
     localStorage.removeItem('jwt')
     this.props.history.push('/');
-    // this.setState({
-    //   currentUser: {}
-    // })
   }
 
   async handlePostCategory(e) {
@@ -189,6 +158,8 @@ class App extends Component {
     this.props.history.push('/users/create/new/inventory');
   }
 
+
+
   async editCategorySubmit(e) {
     e.preventDefault();
     const updateCategory = await editCategory(
@@ -201,6 +172,15 @@ class App extends Component {
       ]
     }));
     await this.getAllCategories(this.state.selectedCategories.user_id);
+  }
+
+  setCategoryId(id) {
+    this.setState({
+      userItem: {
+        category_id: id
+      },
+    });
+    this.props.history.push('/users/create/inventory/items')
   }
 
   setCategoryFormData(data) {
@@ -222,12 +202,6 @@ class App extends Component {
     });
   }
 
-  async getAllItems(id, idTwo) {
-    const items = await fetchAllItems(id, idTwo)
-    this.setState({
-      items
-    })
-  }
 
 async destroyCategory(user_id, id) {
   const destroyCategory = await deleteCategory(user_id, id);
@@ -239,6 +213,21 @@ async destroyCategory(user_id, id) {
   this.props.history.push('/users/create/new/inventory')
 }
 
+async getItems(id, idTwo, idThree) {
+  const items = await fetchItems(id, idTwo, idThree)
+  this.setState({
+    items
+  })
+}
+
+async getAllItems(idTwo) {
+  const items = await fetchAllItems(this.state.currentUser.id, idTwo)
+  this.setState({
+    items
+  })
+  this.props.history.push('/users/view/items')
+}
+
 
 
   render() {
@@ -248,8 +237,8 @@ async destroyCategory(user_id, id) {
         <Header
           handleLogout={this.handleLogout}
           currentUser={this.state.currentUser}
-
         />
+
         <Main
           {...this.props}
           handleLoginSubmit={this.handleLoginSubmit}
@@ -277,12 +266,11 @@ async destroyCategory(user_id, id) {
           items={this.state.items}
 
           setCategoryId={this.setCategoryId}
-          getAllItems={this.getAllItems}
           setCategoryFormData={this.setCategoryFormData}
           selectedCategories={this.state.selectedCategories}
           editCategorySubmit={this.editCategorySubmit}
-          selectedCategories={this.state.selectedCategories}
           handleEditChange={this.handleEditChange}
+          getAllItems={this.getAllItems}
         />
 
 

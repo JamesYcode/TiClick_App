@@ -1,16 +1,13 @@
 import React from 'react';
 
 function ItemsList(props) {
-  const {
-    items,
-    currentUser,
-    userItem
-  } = props
   return(
-    <div>
+    <div className='main-item-list'>
       {props.itemsList.map(list => (
-        <div key={list.id}>
-          <p><strong>Title:</strong> {list.title} <strong>Description:</strong> {list.description} <strong>Quantity:</strong> {list.quantity}</p>
+        <div id='item-list' key={list.id}>
+          <p><strong>Title:</strong>{list.title}</p>
+          <p><strong>Description:</strong>{list.description}</p>
+          <p><strong>quantity:</strong>{list.quantity}</p>
         </div>
       ))}
     </div>

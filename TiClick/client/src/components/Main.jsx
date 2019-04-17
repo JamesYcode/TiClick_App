@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link, Route } from 'react-router-dom';
-import Users from './Users';
+import { Route } from 'react-router-dom';
 import RegisterForm from './forms/RegisterForm';
 import LoginForm from './forms/LoginForm';
 import CategoryForm from './forms/CategoryForm';
@@ -8,7 +7,6 @@ import CategoriesList from './CategoriesList';
 import ItemForm from './forms/ItemForm';
 import ItemsList from './ItemsList';
 import EditCategoryForm from './forms/EditCategoryForm';
-import Profile from './Profile';
 
 function Main(props) {
   const {
@@ -22,22 +20,20 @@ function Main(props) {
     handleSubmitCategory,
     username,
     password,
-    users,
     name,
     email,
-    items,
     title,
     categoriesList,
     itemsList,
     currentUser,
     userItem,
     setCategoryId,
-    getAllItems,
     destroyCategory,
     setCategoryFormData,
     editCategorySubmit,
     handleEditChange,
-    selectedCategories
+    selectedCategories,
+    getAllItems
   } = props;
 
   return(
@@ -64,22 +60,7 @@ function Main(props) {
       )} />
 
 
-
-
-
-
-
-
-
-      
-      <div className='nav'>
-        {currentUser.id && <nav className='main-nav'>
-          {currentUser.id && <Link id='create-inventory' to='/users/create/new/inventory'>Create Inventory</Link>}
-          {currentUser.id && <button id='item-list' onClick={() => {
-            getAllItems(currentUser.id, userItem.category_id)
-          }}><Link id='item-list-link' to='/users/items'>List of items</Link></button>}
-        </nav>}
-
+      <div className='main-content'>
         <Route exact path='/users/create/new/inventory' render={(props) => (
           <CategoriesList
             categoriesList={categoriesList}
@@ -93,6 +74,7 @@ function Main(props) {
             destroyCategory={destroyCategory}
             setCategoryFormData={setCategoryFormData}
             editCategorySubmit={editCategorySubmit}
+            getAllItems={getAllItems}
           />
         )} />
 
@@ -106,43 +88,29 @@ function Main(props) {
         )} />
 
 
-        <div className='category-form'>
+
           <Route exact path='/users/create/new/inventory' render={() => (
-            <CategoryForm
-              handleChange={handleChange}
-              handlePostCategory={handlePostCategory}
-              title={title}
+            <div className='category-form'>
+              <CategoryForm
+                handleChange={handleChange}
+                handlePostCategory={handlePostCategory}
+                title={title}
+              />
+              <EditCategoryForm
+                editCategorySubmit={editCategorySubmit}
+                handleEditChange={handleEditChange}
+                handleChange={handleChange}
+                title={selectedCategories.title}
+              />
+            </div>
+          )} />
+
+          <Route path='/users/view/items' render={() => (
+            <ItemsList
+              itemsList={itemsList}
             />
           )} />
-          <Route exact path='/users/create/new/inventory' render={() => (
-            <EditCategoryForm
-              editCategorySubmit={editCategorySubmit}
-              handleEditChange={handleEditChange}
-              handleChange={handleChange}
-              title={selectedCategories.title}
-            />
-          )} />
-        </div>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-      <Route exact path='/users/items' render={() => (
-        <ItemsList
-          items={items}
-          currentUser={currentUser}
-          itemsList={itemsList}
-        />
-      )} />
     </div>
   )
 }
