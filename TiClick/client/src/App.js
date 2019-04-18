@@ -231,7 +231,6 @@ async getAllItems(idTwo) {
 
 
   render() {
-    console.log(this.state);
     return (
       <div className="App">
         <Header
@@ -272,8 +271,6 @@ async getAllItems(idTwo) {
           handleEditChange={this.handleEditChange}
           getAllItems={this.getAllItems}
         />
-
-
       </div>
     );
   }
